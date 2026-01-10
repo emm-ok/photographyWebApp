@@ -1,0 +1,46 @@
+import express from 'express'
+
+import cors from 'cors'
+import morgan from 'morgan'
+import { env } from './config/env.js'
+import { connectToDatabase } from './config/db.js'
+import cookieParser from 'cookie-parser';
+import authRouter from './modules/auth/auth.routes.js';
+import userRouter from './modules/users/user.routes.js';
+import packageRouter from './modules/packages/package.routes.js';
+import bookingRouter from './modules/bookings/booking.routes.js';
+import paymentRouter from './modules/payments/payment.routes.js';
+import mediaRouter from './modules/media/media.routes.js';
+import { errorMiddleware } from './middlewares/error.middleware.js';
+import {authLimiter} from './middlewares/rateLimit.middleware.js'
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(morgan('dev'));
+app.use(authLimiter)
+
+app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
+app.use('/api/packages', packageRouter);
+app.use('/api/bookings', bookingRouter);
+app.use('/api/payments', paymentRouter);
+app.use('/api/media', mediaRouter);
+
+app.use(errorMiddleware);
+
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+    })
+});
+
+await connectToDatabase();
+
+app.listen(env.PORT, () => {
+    console.log(`Photography web app API is running on http://localhost:${env.PORT}`)
+})
