@@ -15,6 +15,6 @@ userRouter.put('/me', protect, updateMyProfile);
 userRouter.get('/', protect, allowRoles(ROLES.ADMIN),  getAllUsers);
 userRouter.get('/:id', protect, allowRoles(ROLES.ADMIN),  getUserById);
 
-// userRouter.patch('/:id/role', protect, allowRoles(ROLES.ADMIN), updateUserRole);
 
 export default userRouter;
+// userRouter.patch('/:id/role', protect, allowRoles(ROLES.ADMIN), updateUserRole);

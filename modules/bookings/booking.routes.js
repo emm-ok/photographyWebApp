@@ -6,6 +6,7 @@ import {
     getBookingById,
     cancelBooking,
     getAllBookings,
+    getBookingDate,
 } from './booking.controller.js'
 
 import { protect } from '../../middlewares/auth.middlware.js'
@@ -42,6 +43,13 @@ bookingRouter.patch(
     }),
     cancelBooking
 );
+// GET BOOKING DATES
+bookingRouter.get(
+    '/dates', 
+    protect, 
+    allowRoles(ROLES.CLIENT), 
+    getBookingDate
+)
 
 // Admin
 bookingRouter.get('/', protect, allowRoles(ROLES.ADMIN), getAllBookings);

@@ -3,15 +3,11 @@ import User from "../users/user.model.js";
 import jwt from "jsonwebtoken";
 import { generateAccessToken } from "../../utils/token.js";
 import { ROLES } from "../../constants/roles.js";
-import mongoose from "mongoose";
+import { env } from "../../config/env.js";
 
 export const register = async (req, res, next) => {
-  //   const session = await mongoose.startSession();
-  //   session.startTransaction();
-
   try {
     const { name, email, password } = req.body;
-    console.log("Request", req.body);
 
     if (!name || !email || !password) {
       const error = new Error("name, email and password are required");
@@ -42,30 +38,41 @@ export const register = async (req, res, next) => {
       role: ROLES.CLIENT,
     });
 
-    res.status(201).json({
+    const accessToken = generateAccessToken({
+      id: user._id,
+      role: user.role,
+    });
+
+    const isProd = env.NODE_ENV === "production";
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: isProd, // true in production
+      sameSite: isProd ? "None" : "Lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(201).json({
       success: true,
       message: "User created successfully",
-      data: {
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        },
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
-
-
 
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select('+password')
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       const error = new Error("User not found");
@@ -84,17 +91,25 @@ export const login = async (req, res, next) => {
 
     // Generate access token
     const accessToken = generateAccessToken({
-        id: user._id,
-        role: user.role,
-    })
+      id: user._id,
+      role: user.role,
+    });
 
+    const isProd = env.NODE_ENV === "production";
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: isProd, // true in production
+      sameSite: isProd ? "None" : "Lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     return res.status(200).json({
       success: true,
       message: "User signed in successfully",
       data: {
-        accessToken,
-        user:  {
+        user: {
           id: user._id,
           name: user.name,
           email: user.email,
@@ -103,6 +118,36 @@ export const login = async (req, res, next) => {
       },
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    // Clear the HTTP-only cookie
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
+      sameSite: env.NODE_ENV === "production" ? "None" : "Lax",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const fetchMe = async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    user: {
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role,
+    },
+  });
 };

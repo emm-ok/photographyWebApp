@@ -16,7 +16,10 @@ import {authLimiter} from './middlewares/rateLimit.middleware.js'
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -31,6 +34,18 @@ app.use('/api/payments', paymentRouter);
 app.use('/api/media', mediaRouter);
 
 app.use(errorMiddleware);
+
+app.get("/test-cookie", (req, res) => {
+  res.cookie("testCookie", "123", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "None",
+    path: "/",
+  });
+
+  res.json({ ok: true });
+});
+
 
 app.get('/health', (req, res) => {
     res.status(200).json({

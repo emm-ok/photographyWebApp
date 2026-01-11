@@ -1,7 +1,7 @@
 
 
 // Prevents bad input and Protects DB
-export const validate = (schema) => {
+export const validate = (schema) => (req, res, next) {
     try {
         schema.parse({
             body: req.body,
