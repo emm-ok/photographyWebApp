@@ -40,7 +40,9 @@ export default function LoginPage() {
       toast.error(message);
     }
 
-    if(loading) return <Skeleton />
+    if(loading) return (
+      <Skeleton className="h-20 w-2/4" />
+    )
 
   };
 
