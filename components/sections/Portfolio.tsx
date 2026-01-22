@@ -2,7 +2,7 @@
 
 import Section from "../layout/Section";
 import Container from "../layout/Container";
-import { motion } from "framer-motion";
+import { Easing, motion, Variants } from "framer-motion";
 import Image from "next/image";
 
 import image1 from "@/public/img13.jpg";
@@ -29,8 +29,9 @@ const containerVariants = {
     },
   },
 };
+const easeOut: Easing = [0.25, 0.1, 0.25, 1];
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 30,
@@ -40,7 +41,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut",
+      ease: easeOut,
     },
   },
 };

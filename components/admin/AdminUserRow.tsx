@@ -1,6 +1,11 @@
+import { User } from "@/types/auth";
 import { MoreHorizontal } from "lucide-react";
 
-export default function AdminUserRow({ user }) {
+interface AdminUserRowProps {
+  user: User;
+}
+
+export default function AdminUserRow({ user }: AdminUserRowProps) {
   return (
     <tr className="border-t hover:bg-gray-50">
       <td className="p-4">

@@ -7,7 +7,6 @@ import { createPackage, updatePackage } from "@/lib/package";
 import { toast } from "sonner";
 import { Skeleton } from "../ui/Skeleton";
 
-
 const PackageFormSkeleton = () => (
   <div className="space-y-6 animate-pulse">
     <Skeleton className="h-6 w-1/3" />
@@ -116,7 +115,9 @@ export default function CreatePackagePage({
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,

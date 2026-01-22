@@ -1,10 +1,15 @@
+import {  Package } from "./package";
+
 export interface Booking {
   _id: string;
-  sessionDate: string;
-  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED';
-  package: {
+  user: {
+    _id: string;
     name: string;
-    price: number;
-    coverImage: string;
-  };
+    email: string;
+    image?: string;
+  }
+  sessionDate: string;
+  status: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
+  package: Package;
+  notes?: string;
 }

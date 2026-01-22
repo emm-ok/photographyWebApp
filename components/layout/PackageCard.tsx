@@ -4,7 +4,7 @@ import { Package } from '@/types/package';
 export default function PackageCard({ pkg }: { pkg: Package }) {
   return (
     <div className="rounded-xl border bg-white p-6 shadow-sm hover:shadow-lg transition">
-      <h3 className="text-xl font-semibold">{pkg.title}</h3>
+      <h3 className="text-xl font-semibold">{pkg.name}</h3>
       <p className="text-gray-600 mt-2">{pkg.description}</p>
 
       <div className="mt-4 flex justify-between items-center">

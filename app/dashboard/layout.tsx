@@ -10,21 +10,20 @@ import {
   Box,
   Users,
   GalleryHorizontal,
-  Menu,
   X,
-  ChevronRight,
-  MenuIcon,
   LayoutDashboardIcon,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import DashNavbar from "@/components/dashboard/DashNavbar";
 import { useState } from "react";
-import { Chevron } from "react-day-picker";
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
+
+  if(loading) return null;
+  if(!user) return null;
 
   const userNavItems = [
     { name: "Overview", href: "/dashboard/user", icon: LayoutDashboard },
@@ -41,8 +40,16 @@ export default function DashboardLayout({ children }) {
     { name: "Packages", href: "/dashboard/admin/packages", icon: Box },
   ];
 
-  const navLinks = (items) =>
-    items.map((item) => {
+  interface NavItem {
+    name: string;
+    href: string;
+    icon: React.ComponentType<{ size?: number }>;
+  }
+// console.log("AUTH USER:", user);
+// console.log("ROLE:", user?.role);
+
+  const navLinks = (items: NavItem[]) =>
+    items.map((item: NavItem) => {
       const Icon = item.icon;
       const isActive = pathname === item.href;
 
@@ -116,7 +123,8 @@ export default function DashboardLayout({ children }) {
             <nav className="space-y-1">
               {user?.role === "admin"
                 ? navLinks(adminNavItems)
-                : navLinks(userNavItems)}
+                : navLinks(userNavItems)
+              }
             </nav>
           </div>
 

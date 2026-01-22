@@ -1,7 +1,8 @@
 import { api } from "./api";
-import { Package } from "@/types/package";
+import { Package, PackagePayload } from "@/types/package";
 import { ApiResponse } from "@/types/api";
-import axios from "axios";
+
+
 
 // PUBLIC
 export const getPublicPackages = async (): Promise<Package[]> => {
@@ -10,7 +11,7 @@ export const getPublicPackages = async (): Promise<Package[]> => {
 };
 
 // ADMIN
-export const createPackage = async (payload) => {
+export const createPackage = async (payload: PackagePayload): Promise<Package> => {
   const res = await api.post("/api/packages", payload);
   return res.data.package;
 };
@@ -41,7 +42,7 @@ export const togglePackageVisibility = async(id: string) => {
   await api.patch(`/api/packages/${id}/visibility`);
 }
   
-export const updatePackage = async (id, payload) => {
+export const updatePackage = async (id: string, payload: PackagePayload): Promise<Package> => {
   const res = await api.put(`/api/packages/${id}`, payload);
   return res.data.package;
 };

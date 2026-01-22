@@ -17,6 +17,7 @@ interface Filter {
   type: string;
 }
 
+type BookingStatus = "PENDING" | "CONFIRMED" | "COMPLETED" | "CANCELLED";
 export default function AdminBookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,22 +65,27 @@ export default function AdminBookingsPage() {
       toast.success("Booking cancelled");
       setBookings((prev) =>
         prev.map((b) =>
-          b._id === booking._id ? { ...b, status: "CANCELLED" } : b
-        )
-      );
-    } catch {
-      toast.error("Unable to cancel booking");
+          b._id === booking._id ? { ...b, status: "CANCELLED" } : b,
+    ),
+  );
+} catch {
+  toast.error("Unable to cancel booking");
     } finally {
       setActionLoading(false);
     }
   };
 
   // Update booking status
-  const handleStatusChange = async (booking: Booking, newStatus: string) => {
+  const handleStatusChange = async (
+    booking: Booking,
+    newStatus: BookingStatus,
+  ) => {
     try {
       await updateBookingStatus(booking._id, newStatus);
       setBookings((prev) =>
-        prev.map((b) => (b._id === booking._id ? { ...b, status: newStatus } : b))
+        prev.map((b) =>
+          b._id === booking._id ? { ...b, status: newStatus } : b,
+        ),
       );
       toast.success(`Booking status updated to ${newStatus}`);
     } catch {
@@ -190,7 +196,7 @@ export default function AdminBookingsPage() {
                 <td className="px-6 py-4 font-medium text-sm text-gray-900 dark:text-white">
                   <div className="flex items-center gap-2">
                     <Image
-                      src={b.user.image}
+                      src={b.user.image || "/default-avatar.png"}
                       alt={b.user.name}
                       width={40}
                       height={40}
@@ -284,7 +290,9 @@ function StatusBadge({ status }: { status: string }) {
     CANCELLED: "bg-red-500 text-white",
   };
   return (
-    <span className={`px-3 py-1 rounded-full text-xs font-medium ${styles[status] || "bg-gray-300 text-gray-700"}`}>
+    <span
+      className={`px-3 py-1 rounded-full text-xs font-medium ${styles[status] || "bg-gray-300 text-gray-700"}`}
+    >
       {status}
     </span>
   );
@@ -296,13 +304,13 @@ function StatusDropdown({
   onChange,
 }: {
   booking: Booking;
-  onChange: (b: Booking, newStatus: string) => void;
+  onChange: (b: Booking, newStatus: BookingStatus) => void;
 }) {
   const statuses = ["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED"];
   return (
     <select
       value={booking.status}
-      onChange={(e) => onChange(booking, e.target.value)}
+      onChange={(e) => onChange(booking, e.target.value as BookingStatus)}
       className={`px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-neutral-800 outline-none`}
     >
       {statuses.map((s) => (

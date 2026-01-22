@@ -1,12 +1,23 @@
 import React from "react";
 
-const Input = ({ label, ...props }) => {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+}
+
+const Input: React.FC<InputProps> = ({ label, ...props }) => {
   return (
-    <div>
-      <label className="text-sm font-medium">{label}</label>
+    <div className="flex flex-col gap-1">
+      {label && (
+        <label className="text-sm font-medium text-gray-700">
+          {label}
+        </label>
+      )}
+
       <input
         {...props}
-        className="w-full mt-1 rounded-full shadow-md bg-stone-100 px-5 py-3 text-sm focus:outline-none"
+        className={`bg-stone-200 rounded-full px-4 py-3 text-sm focus:outline-none  ${
+          props.className ?? ""
+        }`}
       />
     </div>
   );

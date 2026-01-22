@@ -32,7 +32,7 @@ export default function BookingModal({ open, onClose, pkg }: Props) {
             <h2 className="text-2xl font-semibold mb-1">
               {pkg.type === "subscription" ? "Subscribe" : "Book a Session"}
             </h2>
-            <p className="text-neutral-500 mb-6">{pkg.title}</p>
+            <p className="text-neutral-500 mb-6">{pkg.name}</p>
 
             {pkg.type === "subscription" ? (
               <SubscribeForm pkg={pkg} onClose={onClose} />

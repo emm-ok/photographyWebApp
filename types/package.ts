@@ -1,16 +1,23 @@
-export interface Package {
-  _id: string;
+export type PackageType = "one-time" | "subscription";
+export type UsageRights = "personal" | "commercial";
+
+export interface PackagePayload {
   name: string;
-  price: number; // USD
-  duration: string; // e.g. "2 hours"
+  price: number;
+  duration: number;
+  delivery: number;
+  imageCount: number;
   description: string;
-  features: string[];
-  deliveryTime: string; // e.g. "48 hours"
-  usageRights: "personal" | "commercial";
-  isPopular: boolean;
   isActive: boolean;
-  isArchived: boolean;
-  previewImages?: string[];
-  bookingsCount?: number; // admin analytics
-  order: number;
+  type: PackageType;
+  coverImage?: string;
+}
+
+export interface Package extends PackagePayload {
+  _id: string;
+  featured: string[];
+  deliveryTime: string;
+  usageRights: UsageRights;
+  createdAt: string;
+  updatedAt: string;
 }

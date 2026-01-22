@@ -6,7 +6,7 @@ export interface ServerUser {
   id: string;
   name: string;
   email: string;
-  role: "ADMIN" | "CLIENT";
+  role: "admin" | "client";
 }
 
 export async function getServerUser(): Promise<ServerUser | null> {

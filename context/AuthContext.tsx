@@ -3,52 +3,59 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { api, apiError } from "@/lib/api";
-import { redirect } from "next/navigation";
-
+import { redirect, usePathname } from "next/navigation";
+import { LoginCredentials, RegisterCredentials } from "@/types/auth";
+import axios from "axios";
 
 type User = {
   id: string;
   name: string;
   email: string;
-  role: "CLIENT" | "ADMIN";
+  role: "client" | "admin";
   image?: string | null;
 };
 
-const AuthContext = createContext<{
+interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (data: any) => Promise<void>;
-  register: (data: any) => Promise<void>;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  register: (data: RegisterCredentials) => Promise<void>;
   logout: () => Promise<void>;
-} | null>(null);
+}
 
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
 
   const fetchUser = async () => {
     try {
       const res = await api.get("/api/auth/me");
       setUser(res.data.user);
     } catch (err) {
-      console.error("fetchUser failed:", err);
+      if (!axios.isAxiosError(err) || err.response?.status !== 401) {
+        console.error("Unexpected auth error:", err);
+      }
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (data) => {
+  const login = async (credentials: LoginCredentials) => {
     try {
-      await api.post("/api/auth/login", data);
+      await api.post("/api/auth/login", credentials);
       await fetchUser();
     } catch (error) {
       throw apiError(error);
     }
   };
 
-  const register = async (data) => {
+  const register = async (data: RegisterCredentials) => {
     try {
       await api.post("/api/auth/register", data);
       await fetchUser();
@@ -60,12 +67,19 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await api.post("/api/auth/logout");
     setUser(null);
-    redirect('/login')
+    redirect("/login");
   };
 
   useEffect(() => {
+    const publicRoutes = ["/login", "/register", "/forgot-password"];
+
+    if (publicRoutes.includes(pathname)) {
+      setLoading(false);
+      return;
+    }
+
     fetchUser();
-  }, []);
+  }, [pathname]);
 
   return (
     <AuthContext.Provider value={{ user, loading, login, register, logout }}>
@@ -74,4 +88,11 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+
+  return context;
+};

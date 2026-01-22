@@ -3,14 +3,15 @@ export type PackageType = "one-time" | "subscription"
 export interface BookingPackage {
   _id: string
   name: string
-  description: string
-  price: string
-  duration: string
-  imageCount: number
-  delivery: string
+  price: number
+  duration: number
   type: PackageType
-  featured?: boolean
+  description: string
+  featured?: string[]
+  imageCount?: number
+  delivery?: string
   coverImage: string
+  key?: string
 }
 
 // export const bookingPackages: BookingPackage[] = [

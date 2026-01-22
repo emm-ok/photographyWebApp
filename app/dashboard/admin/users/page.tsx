@@ -4,16 +4,17 @@ import { useEffect, useState } from "react";
 import AdminUserRow from "@/components/admin/AdminUserRow";
 import { getAllUsers } from "@/lib/user";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { User } from "@/types/auth";
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   const fetchAllUsers = async () => {
     try {
       const data = await getAllUsers();
-      setUsers(data.users);
+      setUsers(data.users || []);
     } finally {
       setLoading(false);
     }

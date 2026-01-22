@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import BookingModal from "@/components/booking/BookingModal";
-import { BookingPackage } from "@/lib/bookingData";
 import Image from "next/image";
+import { Package } from "@/types/package";
 
-export default function PackageCard(pkg: BookingPackage) {
+export default function PackageCard(pkg: Package) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -18,7 +18,7 @@ export default function PackageCard(pkg: BookingPackage) {
       >
         {/* Background Image */}
         <Image
-          src={pkg.coverImage}
+          src={pkg.coverImage || "/placeholder.jpg"}
           alt={pkg.name || "package image"}
           fill
           priority
@@ -94,7 +94,7 @@ export default function PackageCard(pkg: BookingPackage) {
       <BookingModal
         open={open}
         onClose={() => setOpen(false)}
-        pkg={pkg}
+        pkg={{ ...pkg, delivery: pkg.delivery.toString(), coverImage: pkg.coverImage || "/placeholder.jpg" }}
       />
     </>
   );

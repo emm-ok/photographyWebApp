@@ -4,12 +4,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-// import ProfileDropdown from "./ProfileDropdown";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import ThemeToggle from "../ui/ThemeToggle";
 import ProfileDropdown from "../layout/ProfileDropdown";
+import { Variants, Transition } from "framer-motion";
 
 type NavLink = {
   name: string;
@@ -33,18 +33,18 @@ const LINKS: NavLink[] = [
   { name: "FAQ", href: "/faq" },
 ];
 
-const drawerVariants = {
-  hidden: { x: "100%" },
-  visible: {
-    x: 0,
-    transition: { type: "spring", stiffness: 260, damping: 25 },
-  },
+// define the transition separately so TS infers correctly
+const drawerTransition: Transition = {
+  type: "spring",
+  stiffness: 300,
+  damping: 30,
 };
 
-const fadeVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
+export const drawerVariants: Variants = {
+  hidden: { x: -300 },
+  visible: { x: 0, transition: drawerTransition },
 };
+
 
 
 export default function Navbar() {
@@ -94,7 +94,7 @@ export default function Navbar() {
                 Sign In
               </Link>
             ) : (
-              <ProfileDropdown user={user} />
+              <ProfileDropdown user={{ ...user, image: user.image || undefined }} />
             )}
             <ThemeToggle />
 

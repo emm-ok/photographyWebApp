@@ -9,6 +9,8 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import ThemeToggle from "../ui/ThemeToggle";
+import { Variants, Transition } from "framer-motion";
+
 
 type NavLink = {
   name: string;
@@ -32,13 +34,18 @@ const LINKS: NavLink[] = [
   { name: "FAQ", href: "/faq" },
 ];
 
-const drawerVariants = {
-  hidden: { x: "100%" },
-  visible: {
-    x: 0,
-    transition: { type: "spring", stiffness: 260, damping: 25 },
-  },
+
+const drawerTransition: Transition = {
+  type: "spring",
+  stiffness: 300,
+  damping: 30,
 };
+
+export const drawerVariants: Variants = {
+  hidden: { x: -300 },
+  visible: { x: 0, transition: drawerTransition },
+};
+
 
 const fadeVariants = {
   hidden: { opacity: 0 },

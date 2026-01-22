@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const PUBLIC_ROUTES = ["/login", "register", "forgot-password", "/bookSession"];
+const PUBLIC_ROUTES = ["/login", "/register", "/forgot-password", "/bookSession"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -22,7 +22,7 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-
+    "/dashboard/:path*",
     "/((?!api|_next|favicon.ico|images).*)",
   ]
 }

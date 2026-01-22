@@ -233,7 +233,7 @@ export default function DashboardPage({
   role,
   userName,
 }: {
-  role: "user" | "admin";
+  role: "client" | "admin";
   userName?: string;
 }) {
   const [data, setData] = useState<any>(null);
@@ -247,7 +247,7 @@ export default function DashboardPage({
             ? await DashboardAPI.adminOverview()
             : await DashboardAPI.userOverview();
         setData(res);
-        console.log(res)
+        // console.log(res)
       } catch (err) {
         console.error(err);
       } finally {

@@ -79,7 +79,7 @@ export default function MyBookingsPage() {
                 {/* Package */}
                 <td className="px-4 py-4 flex items-center gap-2">
                   <Image
-                    src={b.package.coverImage}
+                    src={b.package.coverImage ?? "/images/placeholder.png"}
                     alt={b.package.name}
                     width={40}
                     height={40}
@@ -92,9 +92,7 @@ export default function MyBookingsPage() {
                   {new Date(b.sessionDate).toLocaleString()}
                 </td>
 
-                <td className="px-6 py-4 capitalize">
-                  {b.package.type}
-                </td>
+                <td className="px-6 py-4 capitalize">{b.package.type}</td>
 
                 <td className="px-6 py-4">
                   <span

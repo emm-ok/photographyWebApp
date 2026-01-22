@@ -7,18 +7,16 @@ import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { FcGoogle } from "react-icons/fc";
-
-interface LoginForm {
-  email: string;
-  password: string;
-}
+import { LoginCredentials } from "@/types/auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login, loading } = useAuth();
 
-  const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
-  // const [loading, setLoading] = useState<boolean>(false)
+  const [form, setForm] = useState<LoginCredentials>({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +25,6 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // setLoading(true)
     setError(null);
 
     try {
@@ -39,23 +36,31 @@ export default function LoginPage() {
       setError(message);
       toast.error(message);
     }
-
-    if(loading) return (
-      <Skeleton className="h-20 w-2/4" />
-    )
-
   };
 
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Skeleton className="h-40 w-96 rounded-xl" />
+      </div>
+    );
+  }
+  
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md">
         {/* <h1 className="text-2xl font-bold mb-6 text-center">Login</h1> */}
 
         {error && <p className="text-red-600 mb-4">{error}</p>}
-        <button className="mb-4 flex items-center justify-center gap-4 w-full rounded-lg p-4 font-semibold text-xl bg-neutral-900 text-white" onClick={() => {
-          window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`
-        }}>
-          <span><FcGoogle size={25} /></span>
+        <button
+          className="mb-4 flex items-center justify-center gap-4 w-full rounded-lg p-4 font-semibold text-xl bg-neutral-900 text-white"
+          onClick={() => {
+            window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`;
+          }}
+        >
+          <span>
+            <FcGoogle size={25} />
+          </span>
           <p>Contine with Google</p>
         </button>
         <form onSubmit={handleSubmit} className="space-y-4">

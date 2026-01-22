@@ -1,7 +1,8 @@
 import { ApiResponse } from "@/types/getApi";
 import { api } from "./api"
+import { User } from "@/types/auth";
 
-export const getAllUsers = async (): Promise<ApiResponse<null>> => {
+export const getAllUsers = async (): Promise<ApiResponse<User[]>> => {
   const res = await api.get('/api/users');
   return { users: res.data.filteredUsers, count: res.data.count };
 };
