@@ -5,8 +5,11 @@ import { motion } from "framer-motion";
 import BookingModal from "@/components/booking/BookingModal";
 import Image from "next/image";
 import { Package } from "@/types/package";
+import { redirect } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function PackageCard(pkg: Package) {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
 
   return (
@@ -80,7 +83,13 @@ export default function PackageCard(pkg: Package) {
             </div>
 
             <button
-              onClick={() => setOpen(true)}
+              onClick={() => {
+                if(!user){
+                  redirect("/login")
+                } else{
+                  setOpen(true)
+                }
+              }}
               className="w-full cursor-pointer rounded-xl bg-white text-black py-4 font-semibold transition hover:bg-neutral-200 active:scale-[0.98]"
             >
               {pkg.type === "subscription"

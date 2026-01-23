@@ -14,7 +14,7 @@ export default function SubscriptionToggle({ value, onChange }: Props) {
           onClick={() => onChange(type as any)}
           className={`px-6 py-3 rounded-full text-sm font-medium transition ${
             value === type
-              ? "bg-black text-white dark:bg-white dark:text-black"
+              ? "bg-black text-white"
               : "border border-neutral-300 dark:border-neutral-700"
           }`}
         >

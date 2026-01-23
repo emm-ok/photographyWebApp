@@ -5,7 +5,7 @@ import { fadeUp } from "@/lib/motion"
 
 export default function BookHero() {
   return (
-    <section className="py-28 text-center bg-neutral-50 dark:bg-neutral-950">
+    <section className="py-28 text-center bg-neutral-50">
       <motion.div
         variants={fadeUp}
         initial="hidden"
