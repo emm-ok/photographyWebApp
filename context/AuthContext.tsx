@@ -71,13 +71,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    const publicRoutes = ["/login", "/register", "/forgot-password"];
-
-    if (publicRoutes.includes(pathname)) {
-      setLoading(false);
-      return;
-    }
-
     fetchUser();
   }, [pathname]);
 
