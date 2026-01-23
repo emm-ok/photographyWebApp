@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
   const accessToken = req.cookies.get("accessToken")?.value;
 
   if(!accessToken ){
@@ -15,6 +14,7 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/dashboard/:path*",
+    "/app/dashboard/:path*",
+    "/app/payment/:path*"
   ]
 }

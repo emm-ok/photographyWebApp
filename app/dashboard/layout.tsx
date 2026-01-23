@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   CalendarCheck,
@@ -15,15 +15,23 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import DashNavbar from "@/components/dashboard/DashNavbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
   const { user, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if(!user){
+      router.replace("/login")
+    }
+  }, [user])
 
   if(loading) return null;
   if(!user) return null;
+  
 
   const userNavItems = [
     { name: "Overview", href: "/dashboard/user", icon: LayoutDashboard },
