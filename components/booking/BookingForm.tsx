@@ -61,8 +61,8 @@ export default function BookingForm({
   }
 
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="space-y-6 bg-background">
+      <div className="">
         <label className="text-sm font-medium">Session Date</label>
         <BookingCalendar
           bookedDates={booked}
@@ -77,14 +77,14 @@ export default function BookingForm({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={3}
-          className="mt-2 w-full rounded-xl border px-4 py-3 bg-transparent"
+          className="mt-2 w-full rounded-xl border px-4 py-3 bg-foreground text-background"
         />
       </div>
 
       <button
         onClick={handleBookingAndPayment}
         disabled={loading || !date}
-        className="w-full py-4 rounded-xl bg-black text-white dark:bg-white dark:text-black font-medium disabled:opacity-60"
+        className="w-full py-4 rounded-xl bg-stone-200 text-neutral-800 shadow-md font-medium disabled:opacity-50"
       >
         {loading ? "Redirecting to payment..." : "Confirm & Pay"}
       </button>

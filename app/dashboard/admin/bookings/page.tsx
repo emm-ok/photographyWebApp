@@ -116,7 +116,7 @@ export default function AdminBookingsPage() {
 
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-6">
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+      <h1 className="text-2xl md:text-3xl font-bold text-foreground">
         User Bookings
       </h1>
 
@@ -128,7 +128,7 @@ export default function AdminBookingsPage() {
             onChange={(e) =>
               setFilter((prev) => ({ ...prev, status: e.target.value }))
             }
-            className="bg-white dark:bg-neutral-900 shadow-sm rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="bg-background border-2 shadow-sm rounded-full px-6 py-2 text-sm focus:ring-2 outline-none"
           >
             <option value="ALL">All Statuses</option>
             <option value="PENDING">Pending</option>
@@ -142,7 +142,7 @@ export default function AdminBookingsPage() {
             onChange={(e) =>
               setFilter((prev) => ({ ...prev, type: e.target.value }))
             }
-            className="bg-white dark:bg-neutral-900 shadow-sm rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="bg-background border-2 shadow-sm rounded-full px-4 py-2 text-sm focus:ring-2 outline-none"
           >
             <option value="ALL">All Package Types</option>
             <option value="one-time">One-time</option>
@@ -155,45 +155,45 @@ export default function AdminBookingsPage() {
           placeholder="Search by client, email or package..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="bg-white dark:bg-neutral-900 shadow-sm rounded-xl px-4 py-2 text-sm w-full md:w-1/3 focus:ring-2 focus:ring-blue-500 outline-none"
+          className="bg-background border-2 shadow-sm rounded-xl px-4 py-2 text-sm w-full md:w-1/3 focus:ring-2 outline-none"
         />
       </div>
 
       {/* Desktop Table */}
-      <div className="hidden md:block overflow-x-auto bg-white dark:bg-neutral-900 rounded-3xl shadow-sm">
+      <div className="hidden md:block overflow-x-auto bg-background  rounded-3xl shadow-sm">
         <table className="min-w-full divide-y divide-gray-100 dark:divide-neutral-800">
-          <thead className="bg-gray-50 dark:bg-neutral-800">
+          <thead className="bg-background text-foreground">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
+              <th className="px-6 py-3 text-left text-sm font-medium">
                 Client
               </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
+              <th className="px-6 py-3 text-left text-sm font-medium">
                 Package
               </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
+              <th className="px-6 py-3 text-left text-sm font-medium">
                 Type
               </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
+              <th className="px-6 py-3 text-left text-sm font-medium">
                 Price
               </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
+              <th className="px-6 py-3 text-left text-sm font-medium">
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
+              <th className="px-6 py-3 text-left text-sm font-medium">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
+              <th className="px-6 py-3 text-left text-sm font-medium">
                 Payment
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 dark:divide-neutral-800">
+          <tbody className="divide-y divide-background">
             {paginated.map((b) => (
               <tr
                 key={b._id}
-                className="hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors"
+                className="transition-colors"
               >
-                <td className="px-6 py-4 font-medium text-sm text-gray-900 dark:text-white">
+                <td className="px-6 py-4 font-medium text-sm text-foreground">
                   <div className="flex items-center gap-2">
                     <Image
                       src={b.user.image || "/default-avatar.png"}
@@ -206,16 +206,16 @@ export default function AdminBookingsPage() {
                   </div>
                   <span className="text-xs font-light">{b.user.email}</span>
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-200">
+                <td className="px-6 py-4 text-sm">
                   {b.package.name}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-200">
+                <td className="px-6 py-4 text-sm">
                   {b.package.type}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-200">
+                <td className="px-6 py-4 text-sm">
                   ${b.package.price.toLocaleString()}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-700 dark:text-gray-200">
+                <td className="px-6 py-4 text-sm">
                   {new Date(b.sessionDate).toLocaleString()}
                 </td>
                 <td className="px-6 py-4 text-sm">
@@ -262,17 +262,17 @@ export default function AdminBookingsPage() {
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className="px-3 py-1 rounded-xl bg-white dark:bg-neutral-900 shadow-sm disabled:opacity-40"
+          className="px-3 py-1 rounded-xl bg-background border shadow-sm disabled:opacity-40"
         >
           Prev
         </button>
-        <span className="px-3 py-1 rounded-xl bg-white dark:bg-neutral-900 shadow-sm">
+        <span className="px-3 py-1 rounded-xl bg-background border shadow-sm">
           {page}
         </span>
         <button
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page === totalPages}
-          className="px-3 py-1 rounded-xl bg-white dark:bg-neutral-900 shadow-sm disabled:opacity-40"
+          className="px-3 py-1 rounded-xl bg-background border shadow-sm disabled:opacity-40"
         >
           Next
         </button>
@@ -291,7 +291,7 @@ function StatusBadge({ status }: { status: string }) {
   };
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${styles[status] || "bg-gray-300 text-gray-700"}`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${styles[status] || "bg-background text-foreground"}`}
     >
       {status}
     </span>
@@ -311,7 +311,7 @@ function StatusDropdown({
     <select
       value={booking.status}
       onChange={(e) => onChange(booking, e.target.value as BookingStatus)}
-      className={`px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-neutral-800 outline-none`}
+      className={`px-3 py-1 rounded-full text-xs font-medium bg-background border-2 outline-none`}
     >
       {statuses.map((s) => (
         <option key={s} value={s}>

@@ -94,7 +94,7 @@ export default function ContactForm() {
                 <p className="text-sm text-red-500">{errors.message.message}</p>
               )}
 
-              <ContactButton type="submit">
+              <ContactButton variants ="secondary" type="submit">
                 {status === "loading" ? "Sending..." : "Send Message"}
               </ContactButton>
             </form>

@@ -40,13 +40,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${playfair.variable} ${inter.variable} antialiased`}>
+      <body 
+      className={`${playfair.variable} ${inter.variable} 
+      antialiased bg-background text-foreground transition-colors duration-300`
+      }>
+        <div className="min-h-screen bg-backgorund text-foreground">
         <Toaster position="top-right" />
         <AuthProvider>
           <ConfirmProvider>
             <AnimatedLayout>{children}</AnimatedLayout>
           </ConfirmProvider>
         </AuthProvider>
+
+        </div>
       </body>
     </html>
   );

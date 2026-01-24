@@ -2,7 +2,9 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: [
+    "./app/**/*.{js,ts,jsx,tsx}",  
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
@@ -16,17 +18,17 @@ const config: Config = {
         tightest: "-0.04em",
       },
       colors: {
-        bg: "rgb(var(--bg) / <alpha-value>)",
-        "bg-muted": "rgb(var(--bg-muted) / <alpha-value>)",
-        card: "rgb(var(--bg-card) / <alpha-value>)",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
 
-        text: "rgb(var(--text) / <alpha-value>)",
-        "text-muted": "rgb(var(--text-muted) / <alpha-value>)",
+        card: "hsl(var(--card))",
+        cardForeground: "hsl(var(--card-foreground))",
 
-        border: "rgb(var(--border) / <alpha-value>)",
+        primary: "hsl(var(--primary))",
+        primaryForeground: "hsl(var(--primary-foreground))",
 
-        primary: "rgb(var(--primary) / <alpha-value>)",
-        "primary-foreground": "rgb(var(--primary-foreground) / <alpha-value>)",
+        border: "hsl(var(--border))",
+        muted: "hsl(var(--muted))",
 
         success: "rgb(var(--success) / <alpha-value>)",
         warning: "rgb(var(--warning) / <alpha-value>)",

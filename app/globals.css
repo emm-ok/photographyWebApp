@@ -6,20 +6,20 @@
 
 :root {
   /* Backgrounds */
-  --bg: 255 255 255;
-  --bg-muted: 245 245 245;
-  --bg-card: 255 255 255;
-
-  /* Text */
-  --text: 23 23 23;
-  --text-muted: 115 115 115;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  
+  /* Card */
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
 
   /* Borders & Dividers */
-  --border: 229 229 229;
+  --border: 214.3 31.8% 91.4%;
+  --muted: 210 40% 96%;
 
   /* Brand */
-  --primary: 23 23 23;
-  --primary-foreground: 255 255 255;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
 
   /* Status */
   --success: 34 197 94;
@@ -34,18 +34,18 @@
    DARK THEME
 ========================= */
 
-[data-theme="dark"] {
-  --bg: 9 9 11;
-  --bg-muted: 24 24 27;
-  --bg-card: 18 18 20;
+.dark{
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
 
-  --text: 244 244 245;
-  --text-muted: 161 161 170;
+  --card: 222.2 84% 6%;
+  --card-foreground: 210 40% 98%;
 
-  --border: 39 39 42;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
 
-  --primary: 244 244 245;
-  --primary-foreground: 9 9 11;
+  --border: 217.2 32.6% 17.5%;
+  --muted: 217.2 32.6% 17.5%;
 
   --success: 34 197 94;
   --warning: 250 204 21;
@@ -53,3 +53,10 @@
 
   --shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
 }
+
+
+
+/* Tailwind color utilities will use variables */
+.bg-background { background-color: hsl(var(--background)); }
+.text-foreground { color: hsl(var(--foreground)); }
+.bg-muted { background-color: hsl(var(--muted)); }

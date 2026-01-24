@@ -38,7 +38,7 @@ export default function SubscribeForm({
   return (
     <div className="space-y-6">
       {/* Summary */}
-      <div className="rounded-2xl border p-4 text-sm bg-neutral-50 dark:bg-neutral-800 space-y-2">
+      <div className="rounded-2xl border p-4 text-sm bg-background space-y-2">
         <p className="font-medium">🔁 Monthly Subscription</p>
         <p>⏱ {pkg.duration} sessions / month</p>
         <p>💳 ${pkg.price.toLocaleString()} billed monthly</p>
@@ -51,7 +51,7 @@ export default function SubscribeForm({
       <button
         disabled={loading}
         onClick={handleSubscribe}
-        className="w-full py-4 rounded-xl bg-black text-white dark:bg-white dark:text-black font-medium disabled:opacity-60"
+        className="w-full py-4 rounded-xl bg-stone-200 text-neutral-800 font-medium disabled:opacity-50"
       >
         {loading ? "Processing..." : "Confirm Subscription"}
       </button>

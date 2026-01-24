@@ -1,126 +1,152 @@
 "use client";
 
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import Container from "../layout/Container";
 import Button from "../ui/Button";
 import MotionFade from "../ui/MotionFade";
 
-import hero1 from "@/public/images/packages/event.jpg"
-import hero2 from "@/public/images/packages/lifestyle.jpg";
-import hero3 from "@/public/img13.jpg";
-import hero4 from "@/public/img12.jpg";
-import hero5 from "@/public/img11.jpg";
-import heroMobile1 from "@/public/images/packages/portrait.jpg";
-import heroMobile2 from "@/public/images/packages/wedding.jpg";
+// ---------------- IMAGES ----------------
+import img7 from "@/public/images/packages/event.jpg";
+import img1 from "@/public/img1.jpg";
+import img2 from "@/public/images/packages/lifestyle.jpg";
+import img3 from "@/public/images/packages/portrait.jpg";
+import img4 from "@/public/images/packages/wedding.jpg";
+import img5 from "@/public/img5.jpg";
+import img6 from "@/public/img6.jpg";
+import img8 from "@/public/img8.jpg";
+import img9 from "@/public/img9.jpg";
+import img10 from "@/public/img10.jpg";
+import img11 from "@/public/img11.jpg";
+import img12 from "@/public/img12.jpg";
+import img13 from "@/public/img13.jpg";
 
-const DESKTOP_IMAGES = [hero1, hero2, hero3, hero4, hero5];
-const MOBILE_IMAGES = [heroMobile1, heroMobile2];
+// ---------------- IMAGE GROUPS ----------------
+const IMAGE_GROUPS: StaticImageData[][] = [
+  [img1, img2, img3],
+  [img4, img5, img6],
+  [img2, img6, img7],
+  [img8, img9, img10],
+  [img11, img12, img13],
+];
 
-export default function Hero() {
+// ---------------- TIMINGS (STAGGERED) ----------------
+const INTERVALS = [5000, 6500, 8000, 9500];
+
+// ---------------- IMAGE BOX ----------------
+function ImageBox({
+  images,
+  interval,
+  className,
+}: {
+  images: StaticImageData[];
+  interval: number;
+  className?: string;
+}) {
   const [index, setIndex] = useState(0);
-  // const [paused, setPaused] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
-  const images = isMobile ? MOBILE_IMAGES : DESKTOP_IMAGES;
-
-  /* Detect mobile */
+  // Independent rotation per box
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+    const timer = setInterval(() => {
+      setLoaded(false);
+      setIndex((i) => (i + 1) % images.length);
+    }, interval);
 
-  /* Auto play */
-  useEffect(() => {
-    // if (paused) return;
-
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % images.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, [ images.length]);
-
-  const next = () => setIndex((i) => (i + 1) % images.length);
-  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
+    return () => clearInterval(timer);
+  }, [images.length, interval]);
 
   return (
-    <section
-      className="relative min-h-[80%] overflow-hidden text-white mt-16 p-12"
-      // onMouseEnter={() => setPaused(true)}
-      // onMouseLeave={() => setPaused(false)}
+    <div
+      className={`relative overflow-hidden rounded-2xl bg-muted ${className}`}
     >
-      {/* ===== BACKGROUND SLIDER ===== */}
-      <AnimatePresence>
+      {/* Skeleton */}
+      {!loaded && (
+        <div className="absolute inset-0 animate-pulse bg-border" />
+      )}
+
+      <AnimatePresence mode="wait">
         <motion.div
           key={index}
-          className="absolute inset-0"
-          initial={{ opacity: 0, scale: 1 }}
-          animate={{ opacity: 1, scale: 1.1 }}
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: loaded ? 1 : 0, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.4, ease: "easeInOut" }}
+          transition={{ duration: 1 }}
+          className="absolute inset-0"
         >
           <Image
             src={images[index]}
-            alt="Hero background"
+            alt="Photography sample"
             fill
-            priority
             className="object-cover"
+            onLoad={() => setLoaded(true)}
+            priority
           />
         </motion.div>
       </AnimatePresence>
+    </div>
+  );
+}
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/50 z-10" />
-
-      {/* ===== CONTENT ===== */}
+// ---------------- HERO ----------------
+export default function Hero() {
+  return (
+    <section className="bg-background text-foreground py-28">
       <Container>
-        <div className="h-[500px] relative z-20 grid md:grid-cols-2 gap-40 items-center">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
+          {/* ===== LEFT: TEXT ===== */}
           <MotionFade>
-            <div>
-              <p className="uppercase tracking-widest text-sm text-white/80 mb-4">
+            <div className="text-center">
+              <p className="uppercase tracking-widest text-sm text-muted mb-4">
                 Professional Photographer
               </p>
 
-              <h1 className="font-heading text-3xl md:text-4xl leading-[1.1] mb-6">
+              <h1 className="font-heading font-bold text-4xl md:text-5xl leading-tight mb-6">
                 Capturing Moments <br /> That Live Forever
               </h1>
 
-              <p className="text-lg text-white/90 max-w-md mb-10">
+              <p className="text-lg text-muted mb-10">
                 Timeless wedding, lifestyle, and editorial photography crafted
                 with emotion and authenticity.
               </p>
 
-              <Link href="/bookSession">
+              <Link href="/bookSession" className="cursor-pointer">
                 <Button variant="secondary">Book Session</Button>
               </Link>
             </div>
           </MotionFade>
+
+          {/* ===== RIGHT: IMAGE MOSAIC ===== */}
+          <div className="grid grid-cols-2 gap-6 relative">
+            <ImageBox
+              images={IMAGE_GROUPS[0]}
+              interval={INTERVALS[0]}
+              className="h-56"
+            />
+
+            <ImageBox
+              images={IMAGE_GROUPS[1]}
+              interval={INTERVALS[1]}
+              className="h-72 mt-12"
+            />
+
+            <ImageBox
+              images={IMAGE_GROUPS[2]}
+              interval={INTERVALS[2]}
+              className="h-72 -mt-12"
+            />
+
+            <ImageBox
+              images={IMAGE_GROUPS[3]}
+              interval={INTERVALS[3]}
+              className="h-56"
+            />
+          </div>
         </div>
       </Container>
-
-      {/* ===== CONTROLS ===== */}
-      <div className="absolute z-20 bottom-10 right-10 flex gap-3">
-        <button
-          onClick={prev}
-          className="p-3 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur"
-        >
-          <ChevronLeft />
-        </button>
-
-        <button
-          onClick={next}
-          className="p-3 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur"
-        >
-          <ChevronRight />
-        </button>
-      </div>
     </section>
   );
 }

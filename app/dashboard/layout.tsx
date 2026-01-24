@@ -17,21 +17,17 @@ import { useAuth } from "@/context/AuthContext";
 import DashNavbar from "@/components/dashboard/DashNavbar";
 import { useEffect, useState } from "react";
 
-export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, loading, logout } = useAuth();
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
-    if(!user){
-      router.replace("/login")
-    }
-  }, [user])
+    if (!loading && !user) router.replace("/login");
+  }, [user, loading]);
 
-  if(loading) return null;
-  if(!user) return null;
-  
+  if (loading || !user) return null;
 
   const userNavItems = [
     { name: "Overview", href: "/dashboard/user", icon: LayoutDashboard },
@@ -53,11 +49,9 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
     href: string;
     icon: React.ComponentType<{ size?: number }>;
   }
-// console.log("AUTH USER:", user);
-// console.log("ROLE:", user?.role);
 
   const navLinks = (items: NavItem[]) =>
-    items.map((item: NavItem) => {
+    items.map((item) => {
       const Icon = item.icon;
       const isActive = pathname === item.href;
 
@@ -66,11 +60,12 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
           key={item.name}
           href={item.href}
           onClick={() => setOpen(false)}
-          className={`flex items-center gap-3 text-sm px-3 py-3 rounded-xl transition ${
-            isActive
-              ? "bg-black text-white"
-              : "hover:bg-gray-100 text-gray-700"
-          }`}
+          className={`
+            flex items-center gap-3 text-sm px-4 py-3 rounded-lg transition
+            ${isActive 
+              ? "bg-primary text-primary-foreground font-semibold" 
+              : "text-foreground/80 hover:bg-gray-200"}
+          `}
         >
           <Icon size={18} />
           {item.name}
@@ -80,74 +75,67 @@ export default function DashboardLayout({ children }: Readonly<{ children: React
 
   return (
     <>
+      {/* Navbar */}
       <DashNavbar />
 
-      {/* Mobile toggle button */}
+      {/* Mobile Toggle Button */}
       <button
         onClick={() => setOpen(true)}
-        className="md:hidden flex fixed top-4 left-4 z-50 bg-white shadow p-2 rounded-lg"
+        className="md:hidden fixed top-4 left-4 z-50 bg-card text-card-foreground shadow-[var(--shadow)] p-2 rounded-lg"
+        aria-label="Open Dashboard Menu"
       >
         <LayoutDashboardIcon />
-        
       </button>
 
-      {/* Mobile overlay */}
+      {/* Mobile Overlay */}
       {open && (
         <div
           onClick={() => setOpen(false)}
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          className="fixed inset-0 z-40 bg-black/40 dark:bg-white/20 md:hidden"
         />
       )}
 
-      <div className="z-50 min-h-screen md:grid md:grid-cols-[190px_1fr] bg-gray-50">
+      {/* Layout */}
+      <div className="min-h-screen md:grid md:grid-cols-[200px_1fr] bg-background text-foreground transition-colors duration-300">
         {/* Sidebar */}
         <aside
           className={`
             fixed md:static top-0 left-0 z-50
-            h-full w-[190px] bg-white shadow-lg
+            h-full w-[200px] bg-background text-card-foreground shadow-md]
             flex flex-col justify-between px-4 py-8
-            transform transition-transform duration-300
-            ${open ? "translate-x-0" : "-translate-x-full"}
-            md:translate-x-0 md:flex
+            transform transition-transform duration-300 ease-in-out
+            ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
           `}
         >
           <div>
-            {/* Mobile close button */}
-          <div className="flex items-center justify-between mb-8">
-            <Link href="/" className="text-xl font-bold text-neutral-800">
-            PhotoPro
-          </Link>
-            <button
-              onClick={() => setOpen(false)}
-              className="md:hidden"
-            >
-              <X size={22} />
-            </button>
-          </div>
-            {/* Logo */}
+            {/* Mobile Close Button & Logo */}
+            <div className="flex items-center justify-between mb-6">
+              
+              <button onClick={() => setOpen(false)} className="md:hidden">
+                <X />
+              </button>
+            </div>
 
-            <h2 className="text-lg font-bold mb-6">Dashboard</h2>
+            <h2 className="text-lg font-semibold mb-6">Dashboard</h2>
 
-            <nav className="space-y-1">
-              {user?.role === "admin"
-                ? navLinks(adminNavItems)
-                : navLinks(userNavItems)
-              }
+            <nav className="flex flex-col gap-1">
+              {user.role === "admin" ? navLinks(adminNavItems) : navLinks(userNavItems)}
             </nav>
           </div>
 
+          {/* Logout */}
           <button
             onClick={logout}
-            className="flex items-center gap-3 px-3 py-3 rounded-xl text-red-600 hover:bg-red-50 transition"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-800 transition"
           >
             <LogOut size={18} />
             Logout
           </button>
         </aside>
 
-        {/* Main content */}
+        {/* Main Content */}
         <main className="p-4 md:p-6">
-          <section className="pt-16 bg-white rounded-2xl shadow-sm p-6 min-h-[calc(100vh-3rem)]">
+          <section className="bg-card dark:bg-card rounded-xl p-4 md:p-6 min-h-[calc(100vh-4rem)] shadow-[var(--shadow)] transition-colors duration-300">
             {children}
           </section>
         </main>

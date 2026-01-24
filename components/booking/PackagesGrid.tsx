@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { bookingPackages } from "@/lib/bookingData";
 import PackageCard from "./PackageCard";
 import SubscriptionToggle from "./SubscriptionToggle";
 import { getPublicPackages } from "@/lib/package";
@@ -24,21 +23,22 @@ export default function PackagesGrid() {
         setLoading(false);
       }
     };
-
     fetchPackages();
   }, []);
 
-  if(loading) return <Skeleton />
+  if (loading) return <Skeleton />;
+
   const filteredPackages = packages.filter((pkg) => pkg.type === type);
 
-
   return (
-    <section className="py-24">
+    <section className="py-24 bg-background text-foreground">
       <div className="max-w-6xl mx-auto px-6">
+        {/* Toggle */}
         <SubscriptionToggle value={type} onChange={setType} />
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {filteredPackages.map((pkg) => (
+        {/* Packages Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          {filteredPackages.filter(Boolean).map((pkg) => (
             <PackageCard key={pkg._id} {...pkg} />
           ))}
         </div>

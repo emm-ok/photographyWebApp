@@ -22,7 +22,7 @@ import { Skeleton } from "../ui/Skeleton";
 
 function Card({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-2xl bg-white dark:bg-neutral-900 p-5 sm:p-6 border border-neutral-100 dark:border-neutral-800">
+    <div className="rounded-2xl bg-card text-card-foreground p-6 shadow-[var(--shadow)]">
       {children}
     </div>
   );
@@ -31,25 +31,25 @@ function Card({ children }: { children: ReactNode }) {
 function KPICard({ title, value }: { title: string; value: number | string }) {
   return (
     <Card>
-      <p className="text-xs text-neutral-500">{title}</p>
-      <h3 className="text-2xl sm:text-3xl font-semibold mt-2">{value}</h3>
+      <p className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+        {title}
+      </p>
+      <h3 className="text-3xl font-semibold mt-3 text-foreground">{value}</h3>
     </Card>
   );
 }
 
 function StatusBadge({ status }: { status: string }) {
   const colors: Record<string, string> = {
-    PENDING: "bg-yellow-100 text-yellow-800",
-    CONFIRMED: "bg-green-100 text-green-800",
-    COMPLETED: "bg-neutral-200 text-neutral-800",
-    FAILED: "bg-red-100 text-red-800",
+    PENDING: "bg-[hsl(var(--warning))]/10 text-[hsl(var(--warning))]",
+    CONFIRMED: "bg-[hsl(var(--success))]/10 text-[hsl(var(--success))]",
+    COMPLETED: "bg-muted text-foreground",
+    FAILED: "bg-[hsl(var(--danger))]/10 text-[hsl(var(--danger))]",
   };
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${
-        colors[status] || "bg-gray-100 text-gray-700"
-      }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status]}`}
     >
       {status}
     </span>
@@ -79,21 +79,21 @@ const DashboardAPI = {
 
 function DashboardSkeleton() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <Skeleton className="h-7 w-1/2" />
-        <Skeleton className="h-4 w-3/4 mt-2" />
+        <Skeleton className="h-7 w-1/3" />
+        <Skeleton className="h-4 w-2/3 mt-3" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(4)].map((_, i) => (
-          <Skeleton key={i} className="h-24 rounded-2xl" />
+          <Skeleton key={i} className="h-28 rounded-2xl" />
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Skeleton className="h-[260px] rounded-2xl" />
-        <Skeleton className="h-[260px] rounded-2xl" />
+        <Skeleton className="h-[300px] rounded-2xl" />
+        <Skeleton className="h-[300px] rounded-2xl" />
       </div>
     </div>
   );
@@ -107,7 +107,7 @@ function UserDashboard({ data }: { data: any }) {
   return (
     <>
       {/* KPI */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <KPICard title="Total Bookings" value={data?.stats?.totalBookings} />
         <KPICard title="Upcoming Sessions" value={data?.stats?.upcomingSessions} />
         <KPICard title="Completed Projects" value={data?.stats?.completedProjects} />
@@ -115,21 +115,28 @@ function UserDashboard({ data }: { data: any }) {
       </section>
 
       {/* Charts + List */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         <Card>
-          <h4 className="font-medium mb-4">Bookings Over Time</h4>
-          <ResponsiveContainer width="100%" height={240}>
+          <h4 className="font-medium mb-4 text-sm text-neutral-500">
+            Bookings Over Time
+          </h4>
+          <ResponsiveContainer width="100%" height={260}>
             <LineChart data={data?.chart || []}>
-              <XAxis dataKey="month" />
-              <YAxis />
+              <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+              <YAxis tick={{ fontSize: 12 }} />
               <Tooltip />
-              <Line type="monotone" dataKey="count" stroke="#000" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="count"
+                stroke="hsl(var(--foreground))"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </Card>
 
         <Card>
-          <h4 className="font-medium mb-4">Upcoming Bookings</h4>
+          <h4 className="font-medium mb-4 text-sm text-neutral-500">Upcoming Bookings</h4>
 
           <div className="space-y-3">
             {data?.upcomingBookings?.length ? (
@@ -139,20 +146,20 @@ function UserDashboard({ data }: { data: any }) {
                   href={`/dashboard/user/bookings/${b._id}`}
                   className="block"
                 >
-                  <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition">
+                  <div className="flex items-center justify-between gap-3 p-4 rounded-xl bg-muted hover:opacity-80 transition">
                     <div className="flex items-center gap-3">
                       <Image
                         src={b.package.coverImage}
-                        width={40}
-                        height={40}
+                        width={44}
+                        height={44}
                         alt=""
-                        className="rounded-full object-cover"
+                        className="rounded-full object-cover ring-1 ring-border"
                       />
                       <div>
-                        <p className="font-medium text-sm">{b.package.name}</p>
-                        <p className="text-xs text-neutral-500">
-                          {b.sessionDate}
+                        <p className="font-medium text-sm text-foreground">
+                          {b.package.name}
                         </p>
+                        <p className="text-xs text-neutral-500">{b.sessionDate}</p>
                       </div>
                     </div>
                     <StatusBadge status={b.status} />
@@ -160,7 +167,9 @@ function UserDashboard({ data }: { data: any }) {
                 </Link>
               ))
             ) : (
-              <p className="text-sm text-neutral-500">No upcoming bookings</p>
+              <p className="text-sm text-neutral-500 text-center mt-4">
+                No upcoming bookings
+              </p>
             )}
           </div>
         </Card>
@@ -174,12 +183,12 @@ function UserDashboard({ data }: { data: any }) {
 // ============================
 
 function AdminDashboard({ data }: { data: any }) {
-  const COLORS = ["#000", "#777", "#bbb"];
+  const COLORS = ["hsl(var(--foreground))", "hsl(var(--border))", "hsl(var(--muted))"];
 
   return (
     <>
       {/* KPI */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-6">
         <KPICard title="Users" value={data?.stats?.totalUsers} />
         <KPICard title="Bookings" value={data?.stats?.totalBookings} />
         <KPICard title="Revenue" value={`$${data?.stats?.revenue}`} />
@@ -189,22 +198,27 @@ function AdminDashboard({ data }: { data: any }) {
       </section>
 
       {/* Charts */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
         <Card>
-          <h4 className="font-medium mb-4">Revenue Overview</h4>
-          <ResponsiveContainer width="100%" height={240}>
+          <h4 className="font-medium mb-4 text-sm text-neutral-500">Revenue Overview</h4>
+          <ResponsiveContainer width="100%" height={260}>
             <LineChart data={data?.revenueChart || []}>
-              <XAxis dataKey="month" />
-              <YAxis />
+              <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+              <YAxis tick={{ fontSize: 12 }} />
               <Tooltip />
-              <Line type="monotone" dataKey="amount" stroke="#000" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="amount"
+                stroke="hsl(var(--foreground))"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </Card>
 
         <Card>
-          <h4 className="font-medium mb-4">Bookings by Status</h4>
-          <ResponsiveContainer width="100%" height={240}>
+          <h4 className="font-medium mb-4 text-sm text-neutral-500">Bookings by Status</h4>
+          <ResponsiveContainer width="100%" height={260}>
             <PieChart>
               <Pie
                 data={data?.statusBreakdown || []}
@@ -218,7 +232,7 @@ function AdminDashboard({ data }: { data: any }) {
               </Pie>
               <Tooltip />
             </PieChart>
-          </ResponsiveContainer>
+            </ResponsiveContainer>
         </Card>
       </section>
     </>
@@ -247,7 +261,6 @@ export default function DashboardPage({
             ? await DashboardAPI.adminOverview()
             : await DashboardAPI.userOverview();
         setData(res);
-        // console.log(res)
       } catch (err) {
         console.error(err);
       } finally {
@@ -257,12 +270,14 @@ export default function DashboardPage({
   }, [role]);
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-8">
-      <header>
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-10 bg-background text-foreground">
+      <header className="space-y-1">
         <h1 className="text-2xl font-semibold">
-          {role === "admin" ? "Admin Dashboard" : `Welcome back, ${userName} 👋`}
+          {role === "admin"
+            ? "Admin Dashboard"
+            : `Welcome back, ${userName} 👋`}
         </h1>
-        <p className="text-neutral-500 text-sm">
+        <p className="text-sm text-neutral-500">
           {role === "admin"
             ? "System overview and performance"
             : "Your bookings and recent activity"}

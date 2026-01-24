@@ -10,11 +10,11 @@ export default function Button({
   variant = "primary",
 }: ButtonProps) {
   const base =
-    "px-6 md:px-10 py-3 md:py-4 rounded-full text-md tracking-wide transition"
+    "px-4 py-2 md:px-10 md:py-3 md:py-4 rounded-full text-md tracking-wide transition"
 
   const styles = {
     primary: "bg-neutral-900 text-white hover:bg-neutral-800",
-    secondary:"border border-neutral-300 font-medium text-lg bg-white text-neutral-900 hover:border-neutral-900",
+    secondary:"border border-neutral-300 font-medium text-sm md:text-lg bg-white text-neutral-900 hover:border-neutral-900",
   }
 
   return (

@@ -21,8 +21,8 @@ export default function PackageCard(pkg: Package) {
       >
         {/* Background Image */}
         <Image
-          src={pkg.coverImage || "/placeholder.jpg"}
-          alt={pkg.name || "package image"}
+          src={pkg?.coverImage || "/placeholder.jpg"}
+          alt={pkg?.name || "package image"}
           fill
           priority
           className="object-cover transition-transform duration-500 group-hover:scale-105"

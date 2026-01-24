@@ -5,7 +5,7 @@ import { fadeUp } from "@/lib/motion"
 
 export default function FAQCTA() {
   return (
-    <section className="py-28 bg-neutral-900 text-white">
+    <section className="py-28 bg-background text-foreground">
       <motion.div
         variants={fadeUp}
         initial="hidden"
@@ -16,12 +16,12 @@ export default function FAQCTA() {
         <h2 className="text-4xl font-heading mb-6">
           Still Have Questions?
         </h2>
-        <p className="text-neutral-300 mb-10">
-          Feel free to reach out — I’m happy to help you plan your session.
+        <p className="mb-10">
+          Feel free to reach out, We are happy to help you plan your session.
         </p>
         <a
           href="/contact"
-          className="inline-block px-10 py-4 rounded-full bg-white text-black"
+          className="inline-block px-10 py-4 rounded-full bg-white text-neutral-800 shadow-md"
         >
           Contact Me
         </a>

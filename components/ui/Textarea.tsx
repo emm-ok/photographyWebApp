@@ -13,7 +13,7 @@ const Textarea: React.FC<TextareaProps> = ({
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label className="text-sm font-medium text-gray-700">
+        <label className="text-sm font-medium">
           {label}
         </label>
       )}
@@ -21,7 +21,7 @@ const Textarea: React.FC<TextareaProps> = ({
       <textarea
         rows={rows}
         {...props}
-        className={`border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black resize-none ${
+        className={`bg-stone-200 text-neutral-800 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black resize-none ${
           props.className ?? ""
         }`}
       />

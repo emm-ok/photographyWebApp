@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from "react";
 import Input from "@/components/ui/Input";
 import { toast } from "sonner";
 import { getCurrentUser, updateUserById } from "@/lib/user";
-import { User as UserIcon } from "lucide-react";
+import { User as UserIcon, X } from "lucide-react";
 import Image from "next/image";
 import { Skeleton } from "../ui/Skeleton";
 
-/* ----------------------------------
+/* -------------------------
    Types
----------------------------------- */
+------------------------- */
 type User = {
   _id: string;
   name: string;
@@ -21,54 +21,46 @@ type User = {
   image?: string;
 };
 
-/* ----------------------------------
-   Skeleton UI (Shape-matched)
----------------------------------- */
-const EditProfileSkeleton = () => {
-  return (
-    <div className="max-w-3xl">
-      <Skeleton className="h-7 w-40 mb-6" />
+/* -------------------------
+   Skeleton UI
+------------------------- */
+const EditProfileSkeleton = () => (
+  <div className="max-w-3xl mx-auto">
+    <Skeleton className="h-7 w-40 mb-6" />
+    <div className="rounded-2xl p-6 space-y-6 bg-background border">
+      <div className="flex items-center gap-6">
+        <Skeleton className="h-24 w-24 rounded-full" />
+        <Skeleton className="h-9 w-32 rounded-full" />
+      </div>
 
-      <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-        {/* Avatar row */}
-        <div className="flex items-center gap-6">
-          <Skeleton className="h-24 w-24 rounded-full" />
-          <Skeleton className="h-9 w-32 rounded-full" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="space-y-2">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-12 w-full rounded-xl" />
+          </div>
+        ))}
+        <div className="md:col-span-2 space-y-2">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-32 w-full rounded-xl" />
         </div>
-
-        {/* Form grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="space-y-2">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-12 w-full rounded-xl" />
-            </div>
-          ))}
-
-          {/* Bio */}
-          <div className="md:col-span-2 space-y-2">
-            <Skeleton className="h-4 w-16" />
-            <Skeleton className="h-32 w-full rounded-xl" />
-          </div>
-
-          {/* Save button */}
-          <div className="md:col-span-2 flex justify-end">
-            <Skeleton className="h-12 w-40 rounded-xl" />
-          </div>
+        <div className="md:col-span-2 flex justify-end">
+          <Skeleton className="h-12 w-40 rounded-xl" />
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
-/* ----------------------------------
+/* -------------------------
    Main Component
----------------------------------- */
+------------------------- */
 const EditProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -78,9 +70,7 @@ const EditProfilePage = () => {
     image: "",
   });
 
-  /* ----------------------------------
-     Load user
-  ---------------------------------- */
+  /* Load user */
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -99,26 +89,20 @@ const EditProfilePage = () => {
         setLoading(false);
       }
     };
-
     fetchUser();
   }, []);
 
-  /* ----------------------------------
-     Handlers
-  ---------------------------------- */
+  /* Handlers */
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((p) => ({ ...p, [name]: value }));
   };
 
-  const handleImageUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setImageLoading(true);
 
     try {
@@ -130,9 +114,8 @@ const EditProfilePage = () => {
         "https://api.cloudinary.com/v1_1/dyliae7ie/image/upload",
         { method: "POST", body: uploadData },
       );
-
       const data = await res.json();
-      setFormData((prev) => ({ ...prev, image: data.secure_url }));
+      setFormData((p) => ({ ...p, image: data.secure_url }));
       toast.success("Photo updated");
     } catch {
       toast.error("Image upload failed");
@@ -147,8 +130,8 @@ const EditProfilePage = () => {
 
     setSaving(true);
     try {
-      const updatedUser = await updateUserById(user._id, formData);
-      setUser(updatedUser);
+      const updated = await updateUserById(user._id, formData);
+      setUser(updated);
       toast.success("Profile updated");
     } catch {
       toast.error("Failed to update profile");
@@ -157,102 +140,105 @@ const EditProfilePage = () => {
     }
   };
 
-  /* ----------------------------------
-     Render
-  ---------------------------------- */
   if (loading) return <EditProfileSkeleton />;
-
   if (!user) return null;
 
   return (
-    <div className="max-w-3xl">
-      <h2 className="text-xl font-semibold mb-6">Edit Profile</h2>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+      <h2 className="text-xl font-semibold text-foreground">
+        Edit Profile
+      </h2>
 
-      <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-        {/* Avatar */}
+      <div className="rounded-2xl p-6 space-y-6 bg-background">
+        {/* Avatar + Preview */}
         <div className="flex items-center gap-6">
           <div className="relative">
             {formData.image ? (
               <Image
                 src={formData.image}
                 alt="Profile"
-                width={50}
-                height={50}
-                className="rounded-full w-24 h-24 object-cover border"
+                width={96}
+                height={96}
+                className="rounded-full object-cover border dark:border-zinc-700 cursor-pointer"
+                onClick={() => setPreviewImage(formData.image)}
               />
             ) : (
-              <div className="w-24 h-24 flex items-center justify-center bg-stone-200 rounded-full">
-                <UserIcon size={48} />
+              <div className="w-24 h-24 flex items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 cursor-pointer"
+                onClick={() => toast("Upload a profile image")}>
+                <UserIcon className="text-zinc-500" size={48} />
               </div>
             )}
-
             {imageLoading && (
-              <div className="absolute inset-0 bg-white/70 flex items-center justify-center rounded-full">
-                <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+              <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               </div>
             )}
           </div>
 
-          <label className="bg-stone-200 px-4 py-2 rounded-full cursor-pointer text-sm font-medium hover:bg-stone-300">
+          <label className="px-4 py-2 rounded-full text-sm font-medium cursor-pointer
+            bg-background text-foreground">
             Change Photo
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
+            <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
           </label>
         </div>
 
         {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
-          <Input
-            label="Full Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Input label="Full Name" name="name" value={formData.name} onChange={handleChange} />
           <Input label="Email" value={user.email} disabled />
-
-          <Input
-            label="Phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-
-          <Input
-            label="Location"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-          />
+          <Input label="Phone" name="phone" value={formData.phone} onChange={handleChange} />
+          <Input label="Location" name="location" value={formData.location} onChange={handleChange} />
 
           <div className="md:col-span-2">
-            <label className="text-sm font-medium">Bio</label>
+            <label className="text-sm font-medium text-foreground">
+              Bio
+            </label>
             <textarea
               name="bio"
               value={formData.bio}
               onChange={handleChange}
               rows={4}
-              className="w-full mt-1 rounded-xl bg-stone-100 p-4 text-sm focus:ring-2 focus:ring-black"
+              className="w-full mt-1 rounded-xl p-4 text-sm
+                bg-stone-200 text-neutral-800
+                focus:ring-2 focus:ring-black dark:focus:ring-white"
             />
           </div>
 
           <div className="md:col-span-2 flex justify-end">
             <button
               disabled={saving}
-              className="bg-black text-white px-6 py-3 rounded-xl disabled:opacity-50"
+              className="px-6 py-3 rounded-xl font-medium cursor-pointer
+                bg-background text-foreground border border-border
+                disabled:opacity-50"
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>
       </div>
+
+      {/* ===========================
+          Image Preview Modal
+      =========================== */}
+      {previewImage && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+          <div className="relative max-w-xl w-full rounded-xl overflow-hidden">
+            <Image
+              src={previewImage}
+              alt="Preview"
+              width={800}
+              height={800}
+              className="object-contain w-full h-full"
+            />
+            <button
+              className="absolute top-3 right-3 text-white bg-black/50 p-2 rounded-full hover:bg-black/70"
+              onClick={() => setPreviewImage(null)}
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

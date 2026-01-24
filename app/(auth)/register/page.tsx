@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { registerUser } from "../../../lib/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { FcGoogle } from "react-icons/fc";
+import Image from "next/image";
+import image5 from "../../../public/img9.jpg";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function RegisterPage() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const { register } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,68 +44,107 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md  shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Create Account</h1>
-
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <button
-          className="mb-4 flex items-center justify-center gap-4 w-full rounded-lg p-4 font-bold bg-black text-white"
-          onClick={() => {
-            window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`;
-          }}
-        >
-          <span>
-            <FcGoogle size={25} />
-          </span>
-          <p>Contine with google</p>
-        </button>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border rounded-md"
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="w-full max-w-3xl overflow-hidden rounded-xl border border-border bg-card shadow-card transition-all duration-500 md:grid md:grid-cols-2">
+        
+        {/* Image Section */}
+        <div className="relative hidden md:block">
+          <Image
+            src={image5}
+            alt="Register"
+            width={500}
+            height={500}
+            className="h-full w-full object-cover"
           />
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute bottom-6 left-6 right-6 text-white">
+            <h2 className="text-lg font-semibold">Create an account</h2>
+            <p className="text-xs opacity-90">
+              Join and start booking sessions
+            </p>
+          </div>
+        </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border rounded-md"
-          />
+        {/* Form Section */}
+        <div className="p-5 sm:p-6">
+          <div className="mb-4">
+            <h1 className="text-base font-semibold text-foreground">
+              Register
+            </h1>
+            <p className="text-xs text-muted">
+              Create your account
+            </p>
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border rounded-md"
-          />
+          {error && (
+            <p className="mb-3 rounded-md bg-danger/10 px-3 py-2 text-xs text-danger">
+              {error}
+            </p>
+          )}
 
           <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-neutral-800 text-white rounded-md"
+            className="mb-4 flex w-full items-center justify-center gap-2 rounded-md bg-background bg-neutral-800 px-3 py-2 text-xs font-medium text-foreground text-white transition hover:bg-muted"
+            onClick={() => {
+              window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`;
+            }}
           >
-            {loading ? "Registering..." : "Register"}
+            <FcGoogle size={18} />
+            Continue with Google
           </button>
-        </form>
 
-        <p className="text-sm text-center mt-4">
-          Already have an account?{" "}
-          <Link href="/login" className="text-indigo-600 font-semibold">
-            Login
-          </Link>
-        </p>
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              className="w-full rounded-md border-2 border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-primary"
+              // className="w-full rounded-md border border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              className="w-full rounded-md border-2 border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-primary"
+              // className="w-full rounded-md border border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              className="w-full rounded-md border-2 border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-primary"
+              // className="w-full rounded-md border border-border bg-background px-3 py-2 text-xs text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-md bg-primary bg-neutral-800 px-3 py-2 text-xs font-medium text-primaryForeground text-white transition hover:opacity-90"
+            >
+              {loading ? "Registering..." : "Register"}
+            </button>
+          </form>
+
+          <p className="mt-4 text-center text-[11px] text-muted">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-primary transition hover:underline"
+            >
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

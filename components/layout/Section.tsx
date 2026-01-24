@@ -7,7 +7,7 @@ interface SectionProps {
 
 export default function Section({ children, className }: SectionProps) {
   return (
-    <section className={`py-24 ${className || ""}`}>
+    <section className={`py-24 bg-background text-foreground ${className || ""}`}>
       {children}
     </section>
   )
