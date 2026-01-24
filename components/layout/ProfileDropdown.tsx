@@ -88,12 +88,12 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
             animate="visible"
             exit="exit"
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden"
+            className="absolute right-0 mt-3 w-56 bg-background border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden"
           >
             <div className="flex flex-col py-2 text-sm">
               <Link
                 href={`/dashboard/${user.role === "admin" ? "admin" : "user"}`}
-                className="px-4 py-2 hover:bg-gray-100 transition"
+                className="px-4 py-2  transition"
                 onClick={() => setIsOpen(false)}
               >
                 Dashboard
@@ -101,7 +101,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
 
               <Link
                 href={`/dashboard/${user.role === "admin" ? "admin" : "user"}/profile`}
-                className="px-4 py-2 hover:bg-gray-100 transition"
+                className="px-4 py-2 transition"
                 onClick={() => setIsOpen(false)}
               >
                 View / Edit Profile
@@ -110,21 +110,21 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
               {user.role === "admin" && (
                 <Link
                   href="/dashboard/admin/bookings"
-                  className="px-4 py-2 hover:bg-gray-100 transition"
+                  className="px-4 py-2 transition"
                   onClick={() => setIsOpen(false)}
                 >
                   Manage Bookings
                 </Link>
               )}
 
-              <div className="my-1 h-px bg-gray-100" />
+              <div className="my-1 h-px bg-background" />
 
               <button
                 onClick={() => {
                   setIsOpen(false);
                   logout();
                 }}
-                className="text-left px-4 py-2 hover:bg-gray-100 transition text-red-600"
+                className="text-left px-4 py-2 hover:bg-background transition text-red-600"
               >
                 Logout
               </button>

@@ -41,10 +41,10 @@ function KPICard({ title, value }: { title: string; value: number | string }) {
 
 function StatusBadge({ status }: { status: string }) {
   const colors: Record<string, string> = {
-    PENDING: "bg-[hsl(var(--warning))]/10 text-[hsl(var(--warning))]",
-    CONFIRMED: "bg-[hsl(var(--success))]/10 text-[hsl(var(--success))]",
+    PENDING: "bg-yellow-300 text-[hsl(var(--warning))]",
+    CONFIRMED: "bg-green-500 text-[hsl(var(--success))]",
     COMPLETED: "bg-muted text-foreground",
-    FAILED: "bg-[hsl(var(--danger))]/10 text-[hsl(var(--danger))]",
+    FAILED: "bg-red-600 text-white",
   };
 
   return (

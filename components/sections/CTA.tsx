@@ -31,7 +31,7 @@ export default function CTA() {
             </Link>
 
             {/* Optional Secondary CTA */}
-            <Link href="/portfolio">
+            <Link href="/portfolio" className="ml-4">
               <Button
                 variant="primary"
               >

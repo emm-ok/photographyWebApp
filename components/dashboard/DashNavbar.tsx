@@ -47,7 +47,7 @@ export default function Navbar() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background text-foreground shadow-sm backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full bg-background text-foreground shadow-sm">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex h-16 items-center justify-between">
 
@@ -88,7 +88,7 @@ export default function Navbar() {
           <>
             {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 z-40 bg-black/40 dark:bg-white/20"
+              className="fixed inset-0 z-40 bg-background"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
