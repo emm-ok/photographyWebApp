@@ -22,22 +22,16 @@ export default function CTA() {
             </p>
 
             {/* Primary CTA Button */}
-            <Link href="/bookSession">
-              <Button
-                variant="secondary"
-              >
-                Book Session
-              </Button>
-            </Link>
+            <div className="flex gap-4 justify-center items-center">
+              <Link href="/bookSession">
+                <Button variant="secondary">Book Session</Button>
+              </Link>
 
-            {/* Optional Secondary CTA */}
-            <Link href="/portfolio" className="ml-4">
-              <Button
-                variant="primary"
-              >
-                View Portfolio
-              </Button>
-            </Link>
+              {/* Optional Secondary CTA */}
+              <Link href="/portfolio">
+                <Button variant="primary">View Portfolio</Button>
+              </Link>
+            </div>
           </div>
         </MotionFade>
       </Container>
